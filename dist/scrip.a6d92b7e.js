@@ -131,22 +131,28 @@ controller.on('frame', function (frame) {
 });
 var leap;
 exports.leap = leap;
+},{}],"coord.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getCoords = getCoords;
+
+function getCoords(leapPoint, frame, canvas) {
+  var iBox = frame.interactionBox;
+  var normalizedPoint = iBox.normalizePoint(leapPoint, true);
+  return {
+    x: normalizedPoint[0] * canvas.width,
+    y: (1 - normalizedPoint[1]) * canvas.height
+  };
+}
 },{}],"scrip.js":[function(require,module,exports) {
 "use strict";
 
 var _leap = require("./leap.js");
 
-// let partNum = 750;
-//particle number - change it!
-window.requestAnimFrame = function () {
-  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-    window.setTimeout(callback, 1000 / 60);
-  };
-}(); // function between(min, max) {
-//   return Math.random() * (max - min) + min;
-// }
-// let istruehover = true;
-
+var _coord = require("./coord.js");
 
 var c = document.getElementById('c');
 var ctx = c.getContext('2d'); //context et id du canvas
@@ -165,15 +171,6 @@ var mouse = {
   x: w / 1.2,
   y: h / 1.2
 }; //position souris
-
-document.addEventListener('mousemove', function (e) {
-  mouse.x = e.clientX || e.pageX;
-  mouse.y = e.clientY || e.pageY;
-  istruehover = false;
-}, false);
-document.addEventListener('mouseover', function () {
-  istruehover = false;
-}, false); //trouver la position de la souris
 
 var particles = [];
 
@@ -206,65 +203,58 @@ function particle(x, y) {
 }
 
 function draw() {
-  requestAnimFrame(draw);
   ctx.fillStyle = 'rgba(52, 52, 53, 0.75)';
   ctx.fillRect(0, 0, c.width, c.height);
-  /*
-  ctx.beginPath();
-  ctx.fillStyle = 'orange';
-  ctx.arc(mouse.x, mouse.y, 40, Math.PI * 2, false);
-  ctx.fill();
-  */
 
-  for (var t = 0; t < particles.length; t++) {
-    var p = particles[t];
+  for (var i = 0; i < particles.length; i++) {
+    var position = particles[i];
     ctx.beginPath();
-    ctx.fillStyle = p.color;
-    ctx.arc(p.x, p.y, p.r, Math.PI * 1.9, false);
-    ctx.fill(); //the context of the particle(s)
+    ctx.fillStyle = position.color;
+    ctx.arc(position.x, position.y, position.r, Math.PI * 1.9, false);
+    ctx.fill(); //context de particules
 
     var distorsionRayon = void 0,
-        dx = mouse.x - p.x,
-        dy = mouse.y - p.y;
-    distorsionRayon = Math.sqrt(dx * dx + dy * dy);
+        distorsionX = mouse.x - position.x,
+        distorsionY = mouse.y - position.y;
+    distorsionRayon = Math.sqrt(distorsionX * distorsionX + distorsionY * distorsionY);
 
-    if (distorsionRayon <= 200) {
-      var ax = dx,
-          ay = dy;
-      p.x -= ax / 25;
-      p.y -= ay / 25;
+    if (distorsionRayon <= 150) {
+      var Speedx = distorsionX,
+          Speedy = distorsionY;
+      position.x -= Speedx / 10;
+      position.y -= Speedy / 10;
     }
 
     var disto = void 0,
-        dxo = p.x - p.xo,
-        dyo = p.y - p.yo;
-    disto = Math.sqrt(dxo * dxo + dyo * dyo);
-    p.x -= dxo / 50;
-    p.y -= dyo / 50; // remet les particules a leur place d'origine
+        distoXo = position.x - position.xo,
+        distoYo = position.y - position.yo;
+    disto = Math.sqrt(distoXo * distoXo + distoYo * distoYo);
+    position.x -= distoXo / 10;
+    position.y -= distoYo / 10; // remet les particules a leur place d'origine
 
     if (disto != 0) {
-      p.r = disto / 4 + 15; // simple algebra XD
+      position.r = disto / 4 + 15;
     }
   }
 }
 
 var loop = function loop() {
   window.requestAnimationFrame(loop);
+  draw();
 
   if (_leap.leap && _leap.leap.hands && _leap.leap.hands.length > 0) {
     // Si j'ai une main ...
-    camera.position.z = _leap.leap.hands[0].palmPosition[2] * 0.1 - 10; // if(leap.hands[0].pinchStrength >= 0.96){
-    //     // let indexFinger = getCoords(hand.indexFinger.tipPosition, frame, canvas);
-    //     globe.rotation.y += 0.01;
-    //     clouds.rotation.y += 0.01;
-    // }
+    var _getCoords = (0, _coord.getCoords)(_leap.leap.hands[0].palmPosition, _leap.leap, c),
+        _x = _getCoords.x,
+        _y = _getCoords.y;
+
+    mouse.x = _x;
+    mouse.y = _y;
   }
 };
 
 loop();
-draw();
-setInterval(mousemove, 100);
-},{"./leap.js":"leap.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./leap.js":"leap.js","./coord.js":"coord.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -292,7 +282,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50578" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54463" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
