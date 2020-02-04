@@ -136,36 +136,35 @@ exports.leap = leap;
 
 var _leap = require("./leap.js");
 
-var partNum = 750; //particle number - change it!
-
+// let partNum = 750;
+//particle number - change it!
 window.requestAnimFrame = function () {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
     window.setTimeout(callback, 1000 / 60);
   };
-}();
+}(); // function between(min, max) {
+//   return Math.random() * (max - min) + min;
+// }
+// let istruehover = true;
 
-function between(min, max) {
-  return Math.random() * (max - min) + min;
-}
 
-var istruehover = true;
 var c = document.getElementById('c');
-var ctx = c.getContext('2d'); //context and id of canvas
+var ctx = c.getContext('2d'); //context et id du canvas
 
 /**
  * Loop
  */
 
 var w = window.innerWidth;
-var h = window.innerHeight; //width and height of canvas
+var h = window.innerHeight; //largeur et hauteur du canvas
 
 c.width = w;
 c.height = h; //setting the width and height for canvas
 
 var mouse = {
-  x: w / 2,
-  y: h / 2
-}; //mouse position
+  x: w / 1.2,
+  y: h / 1.2
+}; //position souris
 
 document.addEventListener('mousemove', function (e) {
   mouse.x = e.clientX || e.pageX;
@@ -174,33 +173,36 @@ document.addEventListener('mousemove', function (e) {
 }, false);
 document.addEventListener('mouseover', function () {
   istruehover = false;
-}, false); //finding the mouse position
+}, false); //trouver la position de la souris
 
 var particles = [];
 
-for (var x = 0; x < c.width / 33; x++) {
-  for (var y = 0; y < c.height / 34; y++) {
-    particles.push(new particle(x * 33, y * 33));
+for (var x = 0; x < c.width / 20; x++) {
+  for (var y = 0; y < c.height / 20; y++) {
+    particles.push(new particle(x * 20, y * 20));
   }
-} //the particle function
+} //fonction particules
 
 
 function particle(x, y) {
-  this.x = x + 20;
-  this.y = y + 20;
-  this.xo = x + 20;
-  this.yo = y + 20;
-  this.vx = 0;
-  this.vy = 0;
-  this.r = 15;
-  var one = 'rgba(10, 255, 255, 0.7)';
-  var two = 'rgba(255, 255, 255, 0.7)';
-  var three = 'rgba(10, 255, 255, 0.9)';
-  var four = 'rgba(255, 255, 255, 0.9)';
-  var five = 'rgba(10, 255, 255, 0.5)';
-  var six = 'rgba(255, 255, 255, 0.5)';
-  var colors = [one, two, three, four, five, six];
-  this.color = colors[Math.round(Math.random() * 2)]; //only random colors of the variables
+  this.x = x + 10;
+  this.y = y + 10;
+  this.xo = x + 10;
+  this.yo = y + 10; //   this.vx = 0;
+  //   this.vy = 0;
+
+  this.r = 10; // couleur  mits dans des variables et dans un tableau
+  //    let one = 'rgba(10, 255, 255, 0.7)';
+  //    let two = 'rgba(255, 255, 255, 0.7)';
+  //    let three = 'rgba(10, 255, 255, 0.9)';
+  //    let four = 'rgba(255, 255, 255, 0.9)';
+  //    let five = 'rgba(10, 255, 255, 0.5)';
+  //    let six = 'rgba(255, 255, 255, 0.5)';
+  //    let color = [one, two, three, four, five, six];
+  //    this.color = color[Math.round(Math.random()*2)]
+
+  var colors = 'rgb(255, 255, 255)';
+  this.color = colors; //couleurs random des varaibles
 }
 
 function draw() {
@@ -218,15 +220,15 @@ function draw() {
     var p = particles[t];
     ctx.beginPath();
     ctx.fillStyle = p.color;
-    ctx.arc(p.x, p.y, p.r, Math.PI * 2, false);
+    ctx.arc(p.x, p.y, p.r, Math.PI * 1.9, false);
     ctx.fill(); //the context of the particle(s)
 
-    var dist = void 0,
+    var distorsionRayon = void 0,
         dx = mouse.x - p.x,
         dy = mouse.y - p.y;
-    dist = Math.sqrt(dx * dx + dy * dy);
+    distorsionRayon = Math.sqrt(dx * dx + dy * dy);
 
-    if (dist <= 100) {
+    if (distorsionRayon <= 200) {
       var ax = dx,
           ay = dy;
       p.x -= ax / 25;
@@ -238,7 +240,7 @@ function draw() {
         dyo = p.y - p.yo;
     disto = Math.sqrt(dxo * dxo + dyo * dyo);
     p.x -= dxo / 50;
-    p.y -= dyo / 50; // making the particles move back into place
+    p.y -= dyo / 50; // remet les particules a leur place d'origine
 
     if (disto != 0) {
       p.r = disto / 4 + 15; // simple algebra XD
@@ -261,7 +263,7 @@ var loop = function loop() {
 
 loop();
 draw();
-setInterval(mousemove, 1000);
+setInterval(mousemove, 100);
 },{"./leap.js":"leap.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -290,7 +292,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64518" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50578" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
