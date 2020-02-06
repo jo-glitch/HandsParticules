@@ -157,19 +157,13 @@ var _coord = require("./coord.js");
 var c = document.getElementById('c');
 var ctx = c.getContext('2d');
 var rayon = 75;
-var rayonColor = '';
 var position;
-var one = 'rgba(10, 255, 255, 0.7)';
-var two = 'rgba(255, 255, 255, 0.7)';
-var three = 'rgba(10, 255, 255, 0.9)';
-var four = 'rgba(255, 255, 255, 0.9)';
-var five = 'rgba(10, 255, 255, 0.5)';
-var six = 'rgba(255, 255, 255, 0.5)';
 var red = 'rgb(200,100,50)';
-var colors = [one, two, three, four, five, six];
-var colorRandom = colors[Math.round(Math.random() * 2)];
-var white = 'rgb(255,255,255)'; //context et id du canvas
+var white = 'rgb(255,255,255)';
+var dx = 20;
+var dy = -2; // SOUND
 
+var vent = document.getElementById('#vent');
 /**
  * Loop
  */
@@ -191,8 +185,9 @@ for (var x = 0; x < c.width / 20; x++) {
   for (var y = 0; y < c.height / 20; y++) {
     particles.push(new particle(x * 20, y * 20));
   }
-} //fonction particules
+}
 
+console.log(mouse); //fonction particules
 
 function particle(x, y) {
   this.x = x + 10;
@@ -250,9 +245,29 @@ var draw = function draw() {
 
     if (disto != 0) {
       position.r = disto / 4 + 15;
-    }
+    } // collision mur
+
   }
-};
+}; // Interaction avec la souris
+// mouvement de la souris
+
+
+document.addEventListener('mousemove', function (e) {
+  mouse.x = e.clientX || e.pageX;
+  mouse.y = e.clientY || e.pageY;
+}); // si la souris reste presser
+
+document.addEventListener('mousedown', function () {
+  console.log(mouse);
+  rayon += 5;
+
+  if (rayon >= 350) {
+    rayon = 350;
+  }
+});
+document.addEventListener('mouseup', function () {
+  rayon = 75;
+});
 
 var loop = function loop() {
   window.requestAnimationFrame(loop);
@@ -269,9 +284,8 @@ var loop = function loop() {
 
     if (_leap.leap.hands[0].pinchStrength >= 0.90) {
       // let indexFinger = getCoords(hand.indexFinger.tipPosition, frame, canvas);
-      // console.log(rayon);
-      console.log(mouse);
-      rayon += 5; // particules[0].color = one;
+      // console.log(mouse);
+      rayon += 1;
 
       if (rayon >= 350) {
         rayon = 350;
@@ -311,7 +325,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55075" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51880" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
