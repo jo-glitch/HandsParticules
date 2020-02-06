@@ -155,7 +155,20 @@ var _leap = require("./leap.js");
 var _coord = require("./coord.js");
 
 var c = document.getElementById('c');
-var ctx = c.getContext('2d'); //context et id du canvas
+var ctx = c.getContext('2d');
+var rayon = 75;
+var rayonColor = '';
+var position;
+var one = 'rgba(10, 255, 255, 0.7)';
+var two = 'rgba(255, 255, 255, 0.7)';
+var three = 'rgba(10, 255, 255, 0.9)';
+var four = 'rgba(255, 255, 255, 0.9)';
+var five = 'rgba(10, 255, 255, 0.5)';
+var six = 'rgba(255, 255, 255, 0.5)';
+var red = 'rgb(200,100,50)';
+var colors = [one, two, three, four, five, six];
+var colorRandom = colors[Math.round(Math.random() * 2)];
+var white = 'rgb(255,255,255)'; //context et id du canvas
 
 /**
  * Loop
@@ -165,7 +178,7 @@ var w = window.innerWidth;
 var h = window.innerHeight; //largeur et hauteur du canvas
 
 c.width = w;
-c.height = h; //setting the width and height for canvas
+c.height = h; //largeur hauteur du canvas
 
 var mouse = {
   x: w / 1.2,
@@ -185,32 +198,28 @@ function particle(x, y) {
   this.x = x + 10;
   this.y = y + 10;
   this.xo = x + 10;
-  this.yo = y + 10; //   this.vx = 0;
-  //   this.vy = 0;
+  this.yo = y + 10;
+  this.r = 10; // couleur mits dans des variables et dans un tableau
+  // let one = 'rgba(10, 255, 255, 0.7)';
+  // let two = 'rgba(255, 255, 255, 0.7)';
+  // let three = 'rgba(10, 255, 255, 0.9)';
+  // let four = 'rgba(255, 255, 255, 0.9)';
+  // let five = 'rgba(10, 255, 255, 0.5)';
+  // let six = 'rgba(255, 255, 255, 0.5)';
+  // let colors = [one, two, three, four, five, six];
 
-  this.r = 10; // couleur  mits dans des variables et dans un tableau
-  //    let one = 'rgba(10, 255, 255, 0.7)';
-  //    let two = 'rgba(255, 255, 255, 0.7)';
-  //    let three = 'rgba(10, 255, 255, 0.9)';
-  //    let four = 'rgba(255, 255, 255, 0.9)';
-  //    let five = 'rgba(10, 255, 255, 0.5)';
-  //    let six = 'rgba(255, 255, 255, 0.5)';
-  //    let color = [one, two, three, four, five, six];
-  //    this.color = color[Math.round(Math.random()*2)]
-
-  var colors = 'rgb(255, 255, 255)';
-  this.color = colors; //couleurs random des varaibles
+  this.color = white; //couleurs random des variables
 }
 
-function draw() {
+var draw = function draw() {
   ctx.fillStyle = 'rgba(52, 52, 53, 0.75)';
   ctx.fillRect(0, 0, c.width, c.height);
 
   for (var i = 0; i < particles.length; i++) {
-    var position = particles[i];
+    position = particles[i];
     ctx.beginPath();
     ctx.fillStyle = position.color;
-    ctx.arc(position.x, position.y, position.r, Math.PI * 1.9, false);
+    ctx.arc(position.x, position.y, position.r, Math.PI * 0.4, Math.PI * 0.5, false);
     ctx.fill(); //context de particules
 
     var distorsionRayon = void 0,
@@ -218,7 +227,7 @@ function draw() {
         distorsionY = mouse.y - position.y;
     distorsionRayon = Math.sqrt(distorsionX * distorsionX + distorsionY * distorsionY);
 
-    if (distorsionRayon <= 150) {
+    if (distorsionRayon <= rayon) {
       var Speedx = distorsionX,
           Speedy = distorsionY;
       position.x -= Speedx / 10;
@@ -230,13 +239,20 @@ function draw() {
         distoYo = position.y - position.yo;
     disto = Math.sqrt(distoXo * distoXo + distoYo * distoYo);
     position.x -= distoXo / 10;
-    position.y -= distoYo / 10; // remet les particules a leur place d'origine
+    position.y -= distoYo / 10;
+
+    if (distorsionRayon <= rayon) {
+      position.color = red;
+    } else {
+      position.color = white;
+    } // remet les particules a leur place d'origine
+
 
     if (disto != 0) {
       position.r = disto / 4 + 15;
     }
   }
-}
+};
 
 var loop = function loop() {
   window.requestAnimationFrame(loop);
@@ -250,6 +266,19 @@ var loop = function loop() {
 
     mouse.x = _x;
     mouse.y = _y;
+
+    if (_leap.leap.hands[0].pinchStrength >= 0.90) {
+      // let indexFinger = getCoords(hand.indexFinger.tipPosition, frame, canvas);
+      // console.log(rayon);
+      console.log(mouse);
+      rayon += 5; // particules[0].color = one;
+
+      if (rayon >= 350) {
+        rayon = 350;
+      }
+    } else {
+      rayon = 75;
+    }
   }
 };
 
@@ -282,7 +311,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54463" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55075" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
