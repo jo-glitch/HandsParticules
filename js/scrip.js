@@ -1,9 +1,9 @@
 import { leap } from "./leap.js";
 import { getCoords } from "./coord.js";
 
-import ventwav from '../sound/fire.mp3';
-import ambiancemp3 from '../sound/ambiance.mp3';
-import metalaigue from '../sound/metalLight.mp3';
+// import ventwav from '../sound/fire.mp3';
+// import ambiancemp3 from '../sound/ambiance.mp3';
+// import metalaigue from '../sound/metalLight.mp3';
 
 
 let c = document.getElementById('c');
@@ -12,9 +12,9 @@ let rayon = 75;
 let position;
 let red = 'rgb(200,100,50)';
 let white = 'rgb(255,255,255)';
-let vent = new Pizzicato.Sound(ventwav);
-let ambiance = new Pizzicato.Sound(ambiancemp3);
-let metalLight = new Pizzicato.Sound(metalaigue);
+// let vent = new Pizzicato.Sound(ventwav);
+// let ambiance = new Pizzicato.Sound(ambiancemp3);
+// let metalLight = new Pizzicato.Sound(metalaigue);
 let soundOn = false;
 let windowLoad = true;
 /**
@@ -147,14 +147,14 @@ const loop = () => {
     draw();
     if(mouseDown === true){
         rayon += 3;
-        vent.play();
+        // vent.play();
         if(rayon >= 425){
             rayon = 425;
         }
     }
     if(mouseDown === false){
         rayon = 75;
-        vent.stop();
+        // vent.stop();
     }
     if (leap && leap.hands && leap.hands.length > 0) {
         // Si j'ai une main ...
