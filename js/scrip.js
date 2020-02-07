@@ -44,9 +44,9 @@ for (let x = 0; x < c.width / 20; x++) {
 }
 console.log(mouse)
 //fonction particules
-function particle(x, y) {
-    this.x = x + 10;
-    this.y = y + 10;
+function particle(x, y, particles) {
+    this.x = x + 1;
+    this.y = y + 1;
 
     this.xo = x + 10;
     this.yo = y + 10;
@@ -66,12 +66,75 @@ function particle(x, y) {
     //couleurs random des variables
 }
 
+// 
+const keyboard = {}
+keyboard.up = false
+keyboard.down = false
+keyboard.left = false
+keyboard.right = false
+keyboard.restard = false
+
+document.addEventListener('keydown', (_event) =>{
+    console.log(_event.code)
+     switch(_event.code){
+         case 'keyQ':
+         case 'ArrowUp':
+                    keyboard.up = true;
+                    break;
+        case 'keyD':
+        case 'ArrowRight':
+                   keyboard.right = true;
+                   break;
+        case 'keyS':
+        case 'ArrowDown':
+                    keyboard.down = true;
+                    break;
+        case 'keyA':
+        case 'ArrowLeft':
+                    keyboard.left = true;
+                    break;
+        case 'KeyR': 
+                    keyboard.restart = true;
+                    break;
+     }
+})
+document.addEventListener('keyup', (_event) =>{
+    console.log(_event.code)
+     switch(_event.code){
+         case 'keyQ':
+         case 'ArrowUp':
+                    console.log('up')
+                    keyboard.up = false;
+                    break;
+        case 'keyD':
+        case 'ArrowRight':
+                   console.log('right')
+                   keyboard.right = false;
+                   break;
+        case 'keyS':
+        case 'ArrowDown':
+                    console.log('down')
+                    keyboard.down = false;
+                    break;
+        case 'keyA':
+        case 'ArrowLeft':
+                    console.log('left')
+                    keyboard.left = false;
+                    break;
+        case 'KeyR':
+                    keyboard.restart = false;
+                    break;
+     }
+     console.log(_event.code)
+})
+
 const draw = () => {
     ctx.fillStyle = 'rgba(52, 52, 53, 0.75)';
     ctx.fillRect(0, 0, c.width, c.height);
 
     for (let i = 0; i < particles.length; i++) {
         position = particles[i];
+
 
         ctx.beginPath();
         ctx.fillStyle = position.color;
@@ -98,8 +161,15 @@ const draw = () => {
 
         disto = Math.sqrt(distoXo * distoXo + distoYo * distoYo);
 
+
         position.x -= distoXo / 10;
         position.y -= distoYo / 10;
+        if(keyboard.up === true){
+            position.y += Math.random(Date.now() * 0.1 + position.x * c.width) * c.height;
+        }
+        if(keyboard.left === true){
+            position.x = Math.random(Date.now() * 0.1 + position.x * c.height) * c.width;
+        }
         if(distorsionRayon <= rayon){
             position.color = red;
         }else{
@@ -107,13 +177,13 @@ const draw = () => {
         }
         // remet les particules a leur place d'origine
 
-        if (disto != 0) {
-            position.r = (disto / 4) + 15;
-        }
+        // if (disto != 0) {
+        //     position.r = (disto / 4) + 15;
+        // }
         // collision canvas
         if(mouse.x + rayon > c.width){
             mouse.x = c.width - rayon;
-            soundOn = true;
+            // soundOn = true;
         }
         if(mouse.x - rayon < 0){
             mouse.x = rayon;
@@ -127,6 +197,7 @@ const draw = () => {
 }
 // Interaction avec la souris
 let mouseDown = false;
+let animation = false
 // mouvement de la souris
 document.addEventListener('mousemove', function(e){ 
     mouse.x = e.clientX || e.pageX; 
@@ -140,6 +211,7 @@ document.addEventListener('mousedown', function(){
 });
 document.addEventListener('mouseup', function(){
     mouseDown = false; 
+    animation = true;
  });
 
 const loop = () => {
@@ -156,6 +228,12 @@ const loop = () => {
         rayon = 75;
         // vent.stop();
     }
+    if(keyboard.up === true){
+        position.y = Math.sin(Date.now() * 0.001 + position.x * 1000) * 11;
+    }
+    // for(let i = 0; i < particles.length; i++){
+        // movement particles
+    
     if (leap && leap.hands && leap.hands.length > 0) {
         // Si j'ai une main ...
         let { x, y } = getCoords(leap.hands[0].palmPosition, leap, c);
@@ -179,5 +257,6 @@ const loop = () => {
             }
         }
     }
+
 }
 loop();
