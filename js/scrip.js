@@ -5,6 +5,7 @@ import ventwav from '../sound/fire.mp3';
 import ambiancemp3 from '../sound/ambiance.mp3';
 import metalaigue from '../sound/metalLight.mp3';
 
+
 let c = document.getElementById('c');
 let ctx = c.getContext('2d');
 let rayon = 75;
