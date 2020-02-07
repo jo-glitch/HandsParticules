@@ -164,11 +164,21 @@ const draw = () => {
 
         position.x -= distoXo / 10;
         position.y -= distoYo / 10;
+        // touche haut
         if(keyboard.up === true){
-            position.y += Math.random(Date.now() * 0.1 + position.x * c.width) * c.height;
+            position.y += Math.random( 0.1 + position.x * c.width) * c.height;
         }
+        // touche gauche
         if(keyboard.left === true){
-            position.x = Math.random(Date.now() * 0.1 + position.x * c.height) * c.width;
+            position.x += Math.random(0.1 + position.x * c.height) * c.width;
+        }
+        // touche droite
+        if(keyboard.right === true){
+            position.x -= Math.random(0.1 + position.x * c.height) * c.width;
+        }
+        // touche bas
+        if(keyboard.down === true){
+            position.y -= Math.random( 0.1 + position.x * c.width) * c.height;
         }
         if(distorsionRayon <= rayon){
             position.color = red;
@@ -228,11 +238,6 @@ const loop = () => {
         rayon = 75;
         // vent.stop();
     }
-    if(keyboard.up === true){
-        position.y = Math.sin(Date.now() * 0.001 + position.x * 1000) * 11;
-    }
-    // for(let i = 0; i < particles.length; i++){
-        // movement particles
     
     if (leap && leap.hands && leap.hands.length > 0) {
         // Si j'ai une main ...
