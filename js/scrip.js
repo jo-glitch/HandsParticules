@@ -167,7 +167,7 @@ const draw = () => {
         // animation des particules
         // touche haut
         if(keyboard.up === true){
-            position.y += Math.random( 0.1 + position.x * c.width) * c.height;
+            position.y += Math.random(0.1 + position.x * c.width) * c.height;
         }
         // touche gauche
         if(keyboard.left === true){
