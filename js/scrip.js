@@ -7,10 +7,6 @@ let rayon = 75;
 let position;
 let red = 'rgb(200,100,50)';
 let white = 'rgb(255,255,255)';
-let dx = 20;
-let dy = -2;
-// SOUND
-let vent = document.getElementById('#vent');
 /**
  * Loop
  */
@@ -105,10 +101,23 @@ const draw = () => {
             position.r = (disto / 4) + 15;
         }
         // collision mur
+        if(mouse.x + rayon > c.width){
+            mouse.x = -mouse.x + 90;
+        }
+        if(mouse.x - rayon < c.width){
+            mouse.x = -mouse.x - 70;
+        }
+        if(mouse.y + rayon > c.height){
+            mouse.y = - mouse.y + 75;
+        }
+        if(mouse.y - rayon < c.height){
+            mouse.y = - mouse.y + 75;
+        }
         
     }
 }
 // Interaction avec la souris
+let mouseDown = false;
 // mouvement de la souris
 document.addEventListener('mousemove', function(e){ 
     mouse.x = e.clientX || e.pageX; 
@@ -116,27 +125,33 @@ document.addEventListener('mousemove', function(e){
   
 });
 // si la souris reste presser
+
 document.addEventListener('mousedown', function(){
     console.log(mouse);
-    rayon += 5;
-    
-    if(rayon >= 350){
-        rayon = 350;
-    }
+    mouseDown = true;
 });
 document.addEventListener('mouseup', function(){
-    rayon = 75;
-});
+    mouseDown = false; 
+ });
 
 const loop = () => {
     window.requestAnimationFrame(loop);
     draw();
-
+    if(mouseDown === true){
+        rayon += 5;
+        if(rayon >= 350){
+            rayon = 350;
+        }
+    }
+    if(mouseDown === false){
+        rayon = 75;
+    }
     if (leap && leap.hands && leap.hands.length > 0) {
         // Si j'ai une main ...
         let { x, y } = getCoords(leap.hands[0].palmPosition, leap, c);
         mouse.x = x;
         mouse.y = y;
+
         if(leap.hands[0].pinchStrength >= 0.90){
             // let indexFinger = getCoords(hand.indexFinger.tipPosition, frame, canvas);
             // console.log(mouse);
