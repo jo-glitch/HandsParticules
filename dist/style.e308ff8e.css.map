@@ -1,1 +1,0 @@
-{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA","file":"style.e308ff8e.css","sourceRoot":"..","sourcesContent":["body, html, canvas {\n  margin: 0px; \n  padding: 0px; \n  position: absolute; \n  background-color: #323232; \n  cursor: none; \n}"]}
