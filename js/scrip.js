@@ -1,5 +1,9 @@
-import { leap } from "./leap.js"
-import { getCoords } from "./coord.js"
+import { leap } from "./leap.js";
+import { getCoords } from "./coord.js";
+
+import ventwav from '../sound/fire.mp3';
+import ambiancemp3 from '../sound/ambiance.mp3';
+import metalaigue from '../sound/metalLight.mp3';
 
 let c = document.getElementById('c');
 let ctx = c.getContext('2d');
@@ -7,6 +11,11 @@ let rayon = 75;
 let position;
 let red = 'rgb(200,100,50)';
 let white = 'rgb(255,255,255)';
+let vent = new Pizzicato.Sound(ventwav);
+let ambiance = new Pizzicato.Sound(ambiancemp3);
+let metalLight = new Pizzicato.Sound(metalaigue);
+let soundOn = false;
+let windowLoad = true;
 /**
  * Loop
  */
@@ -100,20 +109,19 @@ const draw = () => {
         if (disto != 0) {
             position.r = (disto / 4) + 15;
         }
-        // collision mur
+        // collision canvas
         if(mouse.x + rayon > c.width){
-            mouse.x = -mouse.x + 90;
+            mouse.x = c.width - rayon;
+            soundOn = true;
         }
-        if(mouse.x - rayon < c.width){
-            mouse.x = -mouse.x - 70;
+        if(mouse.x - rayon < 0){
+            mouse.x = rayon;
         }
         if(mouse.y + rayon > c.height){
-            mouse.y = - mouse.y + 75;
+            mouse.y = c.height - rayon;
+        } else if(mouse.y - rayon< 0){
+            mouse.y = rayon;
         }
-        if(mouse.y - rayon < c.height){
-            mouse.y = - mouse.y + 75;
-        }
-        
     }
 }
 // Interaction avec la souris
@@ -127,7 +135,6 @@ document.addEventListener('mousemove', function(e){
 // si la souris reste presser
 
 document.addEventListener('mousedown', function(){
-    console.log(mouse);
     mouseDown = true;
 });
 document.addEventListener('mouseup', function(){
@@ -138,13 +145,15 @@ const loop = () => {
     window.requestAnimationFrame(loop);
     draw();
     if(mouseDown === true){
-        rayon += 5;
-        if(rayon >= 350){
-            rayon = 350;
+        rayon += 3;
+        vent.play();
+        if(rayon >= 425){
+            rayon = 425;
         }
     }
     if(mouseDown === false){
         rayon = 75;
+        vent.stop();
     }
     if (leap && leap.hands && leap.hands.length > 0) {
         // Si j'ai une main ...
@@ -155,12 +164,18 @@ const loop = () => {
         if(leap.hands[0].pinchStrength >= 0.90){
             // let indexFinger = getCoords(hand.indexFinger.tipPosition, frame, canvas);
             // console.log(mouse);
-            rayon += 1;
-            if(rayon >= 350){
-                rayon = 350;
+            mouseDown = true;
+            if(mouseDown === true){
+                rayon += 3;
+                if(rayon >= 525){
+                    rayon = 525;
+                }
             }
         }else{
-            rayon = 75;
+            mouseDown = false;
+            if(mouseDown === false){
+                rayon = 75;
+            }
         }
     }
 }
