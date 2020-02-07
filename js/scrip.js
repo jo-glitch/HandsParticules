@@ -164,6 +164,7 @@ const draw = () => {
 
         position.x -= distoXo / 10;
         position.y -= distoYo / 10;
+        // animation des particules
         // touche haut
         if(keyboard.up === true){
             position.y += Math.random( 0.1 + position.x * c.width) * c.height;
@@ -180,6 +181,7 @@ const draw = () => {
         if(keyboard.down === true){
             position.y -= Math.random( 0.1 + position.x * c.width) * c.height;
         }
+
         if(distorsionRayon <= rayon){
             position.color = red;
         }else{
